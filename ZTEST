@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------*
+*& Report ZTEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZTEST.
+
+TYPES : BEGIN OF TY_EKKO,
+          BUKRS TYPE BUKRS,
+          BSTYP TYPE EBSTYP,
+          BSART TYPE ESART,
+          BSAKZ TYPE BSAKZ,
+          LOEKZ TYPE ELOEK,
+        END OF TY_EKKO.
+
+
+
+*3 tipos " hashed, sorted standard
+DATA: IT_EKKO  TYPE STANDARD TABLE OF TY_EKKO, "esta, la mejor manera
+      IT_EKKO2 TYPE STANDARD TABLE OF EKKO,
+      LS_EKKO  TYPE TY_EKKO, "Linea
+      LS_EKKO2 TYPE EKKO.
+
+
+
+SELECT   BUKRS
+BSTYP
+BSART
+BSAKZ
+LOEKZ FROM EKKO INTO TABLE IT_EKKO
+                WHERE BSART = 'ZCC1'.
+
+WRITE 'test'.
+
+
+READ TABLE IT_EKKO INTO LS_EKKO INDEX 1.
+
+WRITE 'test'.
+
+LOOP AT IT_EKKO INTO LS_EKKO.
+
+  "de LS_EKKO-bukrs . lo asigno a ls_ekko2-BUKRS
+  LS_EKKO2-BUKRS = LS_EKKO-BUKRS.
+  LS_EKKO2-BSTYP = LS_EKKO-BSTYP.
+  LS_EKKO2-BSART = LS_EKKO-BSART.
+  LS_EKKO2-BSAKZ = LS_EKKO-BSAKZ.
+  LS_EKKO2-LOEKZ = LS_EKKO-LOEKZ.
+  LS_EKKO2-STATU = 'X'.
+
+  APPEND LS_EKKO2 TO IT_EKKO2.
+
+ENDLOOP.
+
+WRITE : 'test'.
